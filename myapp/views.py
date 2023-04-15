@@ -11,6 +11,7 @@ class IndexView(TemplateView):
     
 class SinglePageView(DetailView):
     model = Post
+    template_name= "myapp/single-page.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
