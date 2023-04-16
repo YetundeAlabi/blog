@@ -30,7 +30,13 @@ class Post(models.Model):
     categories = models.ManyToManyField(Category, related_name="posts")
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="post_comments", blank=True, null=True)
     num_of_read = models.PositiveIntegerField(default=0)
-    # image = models.ImageField()
+    
+
+    image = models.ImageField(upload_to="myapp/images", null=True, height_field='img_height', width_field='img_width')
+
+    # height and width fields added to the model
+    img_height = models.PositiveIntegerField(null=True, blank=True, editable=True, default="223")
+    img_width = models.PositiveIntegerField(null=True, blank=True, editable=True, default="350")
 
     class Meta:
         ordering = ['-date_created']

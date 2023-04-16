@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView, ListView
 from .models import Post, Category, Comment
 # Create your views here.
+
+
 class IndexView(TemplateView):
     template_name = 'index.html'
 
@@ -13,6 +15,7 @@ class IndexView(TemplateView):
         context["latest_post"] = Post.objects.order_by('-date_created')[:3]
         context["popular_post"] = Post.objects.order_by('-num_of_read')[:3]
         context["featured_post"] = Post.objects.order_by('?')[:3]
+        context["slider_post"] = Post.objects.order_by('?')[:2]
 
         return context
 
