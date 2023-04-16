@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 # Create your models here.
 
 class Category(models.Model):
@@ -26,7 +27,7 @@ class Post(models.Model):
     content = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=STATUS, default="p", help_text="blog status")
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, related_name="posts")
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="post_comments", blank=True, null=True)
     num_of_read = models.PositiveIntegerField(default=0)
     # image = models.ImageField()
@@ -36,6 +37,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("post-detail", args=[str(self.id)])
     
 
 
