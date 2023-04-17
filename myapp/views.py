@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView, ListView
 from .models import Post, Category, Comment
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
+from .forms import ContactForm
+
 # Create your views here.
 
 
@@ -31,10 +35,6 @@ class SinglePageView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # related_category = self.object.categories.first()
-        # related_posts = Post.objects.filter(categories=related_category).exclude(pk=self.object.pk)
-        # context['related_category'] = related_category
-        # context['related_posts'] = related_posts
         related_posts = Post.objects.filter(categories__in=self.object.categories.all()).exclude(pk=self.object.pk)
         context['related_posts'] = related_posts
         return context
@@ -44,6 +44,21 @@ class SinglePageView(DetailView):
         post.num_of_read += 1
         post.save()
         return post
+
+
+class ContactView(FormView):
+    template_name = 'myapp/contact.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('success')
+
+    
+    def form_valid(self, form):
+        name = form.cleaned_data['name']
+        email = form.cleaned_data['email']
+        subject = form.cleaned_data['subject']
+        message = form.cleaned_data['message']
+        # Send email or perform other processing
+        return super().form_valid(form)
 
 
 

@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -47,6 +48,13 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("post-detail", args=[str(self.id)])
     
+
+
+class Contact(models.Model):
+    name = forms.CharField(max_length=50)
+    email = forms.EmailField()
+    subject = forms.CharField(max_length=100)
+    message = forms.CharField(widget=forms.Textarea)
 
 
 
