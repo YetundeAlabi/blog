@@ -1,7 +1,6 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-{% load static %}
         
         <!-- Single News Start-->
         <div class="single-news">
@@ -9,15 +8,25 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="sn-container">
-                            <div class="sn-img">
-                                
+                            <div class="sn-img"> 
+                                <h1 class="sn-title">{{ post.title }}</h1> 
+                                <p> By: {{ post.author}}</p>
+                                <p><em>{{post.date_created}}</em></p>
                                 <img src="{{ post.image.url }}" style="height: 525px; width: 825px;" />
                             </div>
                             <div class="sn-content">
-                                <h1 class="sn-title">{{ post.title }}</h1>
                                 <p>
-                                   {{ post.content }}
+                                   {{ post.content|safe|linebreaksbr }}
                                 </p>
+                            </div>
+                            <div>
+                                <h2>Comments</h2>
+                                {% for comment in post.comments.all %}
+                                    <p> {{comment}} By {{ comment.name }} on <em>{{comment.created_date}}</em> </p>
+                                {%empty%}
+                                    <p>No comment </p>
+                                {%endfor%}
+                                <a href="{% url 'comment' pk=post.pk %}" style="display: inline-block; border-radius: 4px; background-color: #f4511e; border: none; color: #FFFFFF; text-align: center; font-size: 18px; padding: 10px; width: 200px; transition: all 0.5s; cursor: pointer; margin: 5px;">Add Comment </a>
                             </div>
                         </div>
                         <div class="sn-related">
@@ -59,20 +68,14 @@
                             <div class="sidebar-widget">
                                 <h2 class="sw-title">News Category</h2>
                                 <div class="category">
+                                    {% for category in categories %}
                                     <ul>
-                                        <li><a href="">National</a><span>(98)</span></li>
-                                        <li><a href="">International</a><span>(87)</span></li>
-                                        <li><a href="">Economics</a><span>(76)</span></li>
-                                        <li><a href="">Politics</a><span>(65)</span></li>
-                                        <li><a href="">Lifestyle</a><span>(54)</span></li>
-                                        <li><a href="">Technology</a><span>(43)</span></li>
-                                        <li><a href="">Trades</a><span>(32)</span></li>
+                                        <li><a href="">{{ category }}</a><span>({{ category.posts.count}})</span></li>
                                     </ul>
+                                    {%endfor%}
                                 </div>
                             </div>
-
-                
-                            
+     
                             <div class="sidebar-widget">
                                 <h2 class="sw-title">Tags Cloud</h2>
                                 <div class="tags">

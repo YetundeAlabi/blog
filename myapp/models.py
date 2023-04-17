@@ -1,7 +1,9 @@
+from datetime import datetime
 from django import forms
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils import timezone
 # Create your models here.
 
 class Category(models.Model):
@@ -10,11 +12,16 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Comment(models.Model):
-    text = models.CharField(max_length=200, blank=True)
+
+class Contact(models.Model):
+    name = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    subject = models.CharField(max_length=100, null=True)
+    message = models.TextField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.text
+        return self.name
     
 
 class Post(models.Model):
@@ -29,13 +36,8 @@ class Post(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=STATUS, default="p", help_text="blog status")
     categories = models.ManyToManyField(Category, related_name="posts")
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="post_comments", blank=True, null=True)
     num_of_read = models.PositiveIntegerField(default=0)
-    
-
     image = models.ImageField(upload_to="myapp/images", null=True, height_field='img_height', width_field='img_width')
-
-    # height and width fields added to the model
     img_height = models.PositiveIntegerField(null=True, blank=True, editable=True, default="223")
     img_width = models.PositiveIntegerField(null=True, blank=True, editable=True, default="350")
 
@@ -49,12 +51,12 @@ class Post(models.Model):
         return reverse("post-detail", args=[str(self.id)])
     
 
+class Comment(models.Model):
+    name = models.CharField(max_length=50, default="anonymous", blank=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', null=True)
+    text = models.CharField(max_length=200, blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
 
-class Contact(models.Model):
-    name = forms.CharField(max_length=50)
-    email = forms.EmailField()
-    subject = forms.CharField(max_length=100)
-    message = forms.CharField(widget=forms.Textarea)
-
-
+    def __str__(self):
+        return self.text
 
