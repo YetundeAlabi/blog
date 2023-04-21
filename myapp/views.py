@@ -9,9 +9,9 @@ from .models import Post, Category, Comment
 # Create your views here.
 
 
-class CategoryFilterMixin:
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(category_id=self.kwargs.get('category_id'))
+# class CategoryFilterMixin:
+#     def get_queryset(self, *args, **kwargs):
+#         return super().get_queryset(*args, **kwargs).filter(category_id=self.kwargs.get('category_id'))
 
 
 class IndexView(TemplateView):
@@ -37,7 +37,7 @@ class PostListView(ListView):
     template_name = "index.html"
 
 
-class SinglePageView(CategoryFilterMixin, DetailView):
+class SinglePageView(DetailView):
     model = Post
     template_name= "myapp/single-page.html"
 
