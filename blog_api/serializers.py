@@ -1,42 +1,43 @@
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 from myapp.models import Post, Category, Comment, Contact
 
 class CategorySerializer(serializers.ModelSerializer):
+    post = serializers.ReadOnlyField(read_only=True)
     class Meta:
         model = Category
-        field =["name"]
+        fields =["name", "post"]
+
 
 
 class PostSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
+    author = serializers.CharField(source='author.username', read_only=True)
+
     class Meta:
         model = Post
-        field = "__all__"
+        fields = "__all__"
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    post = PostSerializer(many=True, read_only=True)
+    post = PostSerializer(read_only=True)
     class Meta:
         model = Comment
+        fields = ['name', "text", "post"]
 
 
-class PostSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True, read_only=True)
-    class Meta:
-        model = Post
-        field = "__all__"
 
 
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        field = "__all__"
+        fields = ["name", "email", "subject", "message"]
 
 
-class User(serializers.ModelSerializer):
-
+class UserSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = User
         fields = ["username", "email", "password"]
@@ -50,3 +51,7 @@ class User(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+    
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()

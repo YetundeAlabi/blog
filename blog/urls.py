@@ -19,11 +19,26 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from blog_api import views
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("myapp/", include("myapp.urls")),
-    path("", RedirectView.as_view(url="myapp/", permanent=True))
+    path("api/", include("blog_api.urls"))
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path('api/user_create', UserCreate.as_view()),
+    # path('api-auth/', include('rest_framework.urls')),
+    # path('api-token-auth/', obtain_auth_token, name='api_token_auth'), # obtain authentication token for user
+    # path('users/', UserCreate.as_view(), name='user_create'), # register user
+    # path('api/login_user', LoginView.as_view(), name='login'), # login user
+    # path('api/posts/', PostViewset.as_view({'get': 'list'}), name='post_list'), # list all posts
+    # path('api/posts/<int:pk>/', PostViewset.as_view({'get': 'retrieve'}), name='post_detail'), # retrieve single post by id
+    # path('api/posts/create/', PostListCreate.as_view(), name='post_create'), # create new post
+    # path('api/posts/<int:pk>/update/', PostUpdateDestroyView.as_view(), name='post_update_delete'), # update or delete post by id
+    # path('api/categories/<str:name>/posts', CategoryDetail.as_view(), name='category_detail'), # retrieve category by name
+    # path('contact/', ContactView.as_view(), name='contact'), # send contact message
+    # path('api/posts/<int:pk>/comments', CommentList.as_view(), name="comments")
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
