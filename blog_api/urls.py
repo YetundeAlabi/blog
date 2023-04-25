@@ -1,4 +1,5 @@
 from django.urls import path, include
+
 from blog_api import views
 
 urlpatterns = [

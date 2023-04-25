@@ -1,15 +1,16 @@
 from django.contrib.auth.models import User
+
 from rest_framework import permissions
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 from myapp.models import Post, Category, Comment, Contact
+
 
 class CategorySerializer(serializers.ModelSerializer):
     post = serializers.ReadOnlyField(read_only=True)
+
     class Meta:
         model = Category
-        fields =["name", "post"]
-
+        fields = ["name", "post"]
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -23,11 +24,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     post = PostSerializer(read_only=True)
+
     class Meta:
         model = Comment
         fields = ['name', "text", "post"]
-
-
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -37,7 +37,7 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = User
         fields = ["username", "email", "password"]
@@ -51,7 +51,8 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
-    
+
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()

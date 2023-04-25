@@ -14,13 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from django.views.generic import RedirectView
+
 from django.conf import settings
 from django.conf.urls.static import static
-from blog_api import views
-from rest_framework.authtoken.views import obtain_auth_token
+from django.contrib import admin
+from django.urls import path, include
 
 
 urlpatterns = [
@@ -40,5 +38,4 @@ urlpatterns = [
     # path('api/categories/<str:name>/posts', CategoryDetail.as_view(), name='category_detail'), # retrieve category by name
     # path('contact/', ContactView.as_view(), name='contact'), # send contact message
     # path('api/posts/<int:pk>/comments', CommentList.as_view(), name="comments")
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
